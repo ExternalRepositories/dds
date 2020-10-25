@@ -1941,6 +1941,18 @@
         "description": "Some library components that didn't quite fit anywhere else...",
         "transform": [],
         "url": "git+https://github.com/vector-of-bool/neo-fun.git#0.5.1"
+      },
+      "0.5.2": {
+        "depends": [],
+        "description": "Some library components that didn't quite fit anywhere else...",
+        "transform": [],
+        "url": "git+https://github.com/vector-of-bool/neo-fun.git#0.5.2"
+      },
+      "0.5.3": {
+        "depends": [],
+        "description": "Some library components that didn't quite fit anywhere else...",
+        "transform": [],
+        "url": "git+https://github.com/vector-of-bool/neo-fun.git#0.5.3"
       }
     },
     "neo-sqlite3": {
@@ -1989,6 +2001,14 @@
         "description": "URL parsing and handling library.",
         "transform": [],
         "url": "git+https://github.com/vector-of-bool/neo-url.git#0.1.1"
+      },
+      "0.1.2": {
+        "depends": [
+          "neo-fun^0.4.3"
+        ],
+        "description": "URL parsing and handling library.",
+        "transform": [],
+        "url": "git+https://github.com/vector-of-bool/neo-url.git#0.1.2"
       }
     },
     "nlohmann-json": {
