@@ -55,10 +55,12 @@ stages:
       - job: macos_gcc9
         displayName: macOS - GCC 9
         pool:
-          vmImage: macOS-10.14
+          vmImage: macOS-10.15
         steps:
           - script: brew install gcc@9 ccache
             displayName: Get GCC 9
+          - script: brew install openssl@1.1
+            displayName: Install OpenSSL
           - script: python3 -m pip install pytest pytest-xdist
             displayName: Get Python Dependencies
           - script: make macos-ci
