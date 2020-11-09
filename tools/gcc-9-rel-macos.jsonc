@@ -6,20 +6,13 @@
     "warning_flags": [
         "-Werror",
     ],
-    "flags": [
-        "-fsanitize=address,undefined"
-    ],
     "cxx_flags": [
         "-fconcepts",
         "-std=c++2a",
     ],
     "link_flags": [
-        "-fuse-ld=lld",
-        "-fsanitize=address,undefined",
-        "-l:libssl.a",
-        "-l:libcrypto.a",
-        "-ldl",
+        "-static-libgcc",
+        "-static-libstdc++",
     ],
-    "debug": true,
-    "compiler_launcher": "ccache"
+    "optimize": true
 }

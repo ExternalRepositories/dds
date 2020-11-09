@@ -11,7 +11,10 @@
         "-std=c++2a",
     ],
     "link_flags": [
-        "-static"
+        "-static",
+        "-l:libssl.a",
+        "-l:libcrypto.a",
+        "-ldl",
     ],
     "optimize": true
 }
