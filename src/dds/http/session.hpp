@@ -63,6 +63,13 @@ class http_session {
         }
     }
 
+    void _rebind_refs() {
+        if (_ssl_in) {
+            _ssl_in->stream().rebind_input(_sock_in);
+            _ssl_in->stream().output().rebind_stream(_conn);
+        }
+    }
+
 public:
     explicit http_session(neo::socket s, std::string host_header)
         : _conn(std::move(s))
@@ -73,12 +80,25 @@ public:
         , _host_string(std::move(host_header))
         , _sock_in(_conn, std::move(eng.input().io_buffers()))
         , _ssl_in(std::move(eng)) {
-        _ssl_in->stream().rebind_input(_sock_in);
-        _ssl_in->stream().output().rebind_stream(_conn);
+        _rebind_refs();
     }
 
-    http_session(const http_session&) = delete;
-    http_session& operator=(const http_session&) = delete;
+    http_session(http_session&& other) noexcept
+        : _conn(std::move(other._conn))
+        , _host_string(std::move(other._host_string))
+        , _sock_in(_conn, std::move(other._sock_in.io_buffers()))
+        , _ssl_in(std::move(other._ssl_in)) {
+        _rebind_refs();
+    }
+
+    http_session& operator=(http_session&& other) noexcept {
+        _conn                 = std::move(other._conn);
+        _host_string          = std::move(other._host_string);
+        _sock_in.io_buffers() = std::move(other._sock_in.io_buffers());
+        _ssl_in               = std::move(other._ssl_in);
+        _rebind_refs();
+        return *this;
+    }
 
     void               send_head(http_request_params);
     http_response_info recv_head();
