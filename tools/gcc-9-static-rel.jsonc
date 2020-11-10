@@ -15,6 +15,8 @@
         "-l:libssl.a",
         "-l:libcrypto.a",
         "-ldl",
+        // WORKAROUND: https://sourceware.org/legacy-ml/glibc-bugs/2018-09/msg00009.html
+        "-Wl,-u,pthread_mutex_lock,-u,pthread_mutex_unlock",
     ],
     "optimize": true
 }
