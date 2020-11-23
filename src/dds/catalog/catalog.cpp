@@ -81,7 +81,7 @@ void migrate_repodb_3(nsql::database& db) {
     db.exec(R"(
         CREATE TABLE dds_cat_remotes (
             remote_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            ident TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL UNIQUE,
             gen_ident TEXT NOT NULL,
             remote_url TEXT NOT NULL
         );
@@ -308,7 +308,7 @@ void ensure_migrated(nsql::database& db) {
             "A new catalog database case been created, and has been populated with some initial "
             "contents.");
         neo::sqlite3::statement_cache stmts{db};
-        store_init_packages(db, stmts);
+        // store_init_packages(db, stmts);
     }
 }
 
