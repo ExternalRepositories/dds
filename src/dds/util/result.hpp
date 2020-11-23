@@ -1,5 +1,7 @@
 #pragma once
 
+#include <exception>
+
 #include <boost/leaf/on_error.hpp>
 #include <boost/leaf/result.hpp>
 
