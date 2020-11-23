@@ -308,7 +308,7 @@ void ensure_migrated(nsql::database& db) {
             "A new catalog database case been created, and has been populated with some initial "
             "contents.");
         neo::sqlite3::statement_cache stmts{db};
-        // store_init_packages(db, stmts);
+        store_init_packages(db, stmts);
     }
 }
 
