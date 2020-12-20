@@ -243,13 +243,13 @@ void http_client::_send_buf(neo::const_buffer cbuf) {
 
 namespace {
 
-struct recv_none_state : http_client::erased_body {
+struct recv_none_state : erased_message_body {
     neo::const_buffer next(std::size_t) override { return {}; }
     void              consume(std::size_t) override {}
 };
 
 template <typename Stream>
-struct recv_chunked_state : http_client::erased_body {
+struct recv_chunked_state : erased_message_body {
     Stream&                             _strm;
     neo::http::chunked_buffers<Stream&> _chunked{_strm};
     client_impl_ptr                     _client;
@@ -269,7 +269,7 @@ struct recv_chunked_state : http_client::erased_body {
 };
 
 template <typename Stream>
-struct recv_gzip_state : http_client::erased_body {
+struct recv_gzip_state : erased_message_body {
     Stream&                   _strm;
     neo::gzip_source<Stream&> _gzip{_strm};
     client_impl_ptr           _client;
@@ -289,7 +289,7 @@ struct recv_gzip_state : http_client::erased_body {
 };
 
 template <typename Stream>
-struct recv_plain_state : http_client::erased_body {
+struct recv_plain_state : erased_message_body {
     Stream&         _strm;
     std::size_t     _size;
     client_impl_ptr _client;
@@ -314,8 +314,7 @@ struct recv_plain_state : http_client::erased_body {
 
 }  // namespace
 
-std::unique_ptr<http_client::erased_body>
-http_client::_make_body_reader(const http_response_info& res) {
+std::unique_ptr<erased_message_body> http_client::_make_body_reader(const http_response_info& res) {
     neo_assert(
         expects,
         _impl->_state == detail::http_client_impl::_state_t::recvd_resp_head,
@@ -327,7 +326,7 @@ http_client::_make_body_reader(const http_response_info& res) {
     if (res.status < 200 || res.status == 204 || res.status == 304) {
         return std::make_unique<recv_none_state>();
     }
-    return _impl->_do_io([&](auto&& source) -> std::unique_ptr<http_client::erased_body> {
+    return _impl->_do_io([&](auto&& source) -> std::unique_ptr<erased_message_body> {
         using source_type = decltype(source);
         if (res.content_length() == 0) {
             dds_log(trace, "Empty response body");

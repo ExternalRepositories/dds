@@ -23,6 +23,12 @@ struct http_client_impl;
 
 }  // namespace detail
 
+struct erased_message_body {
+    virtual ~erased_message_body()                   = default;
+    virtual neo::const_buffer next(std::size_t n)    = 0;
+    virtual void              consume(std::size_t n) = 0;
+};
+
 class http_status_error : public std::runtime_error {
     using runtime_error::runtime_error;
 };
@@ -50,14 +56,8 @@ class http_client {
 
     void _send_buf(neo::const_buffer);
 
-    struct erased_body {
-        virtual ~erased_body()                           = default;
-        virtual neo::const_buffer next(std::size_t n)    = 0;
-        virtual void              consume(std::size_t n) = 0;
-    };
-
-    std::unique_ptr<erased_body> _make_body_reader(const http_response_info&);
-    void                         _set_ready() noexcept;
+    std::unique_ptr<erased_message_body> _make_body_reader(const http_response_info&);
+    void                                 _set_ready() noexcept;
 
 public:
     http_client(http_client&& o)
